@@ -1,0 +1,20 @@
+<Project>
+	<PropertyGroup>
+		<BaseIntermediateOutputPath>..\..\build\obj\HashCalculator\</BaseIntermediateOutputPath>
+	</PropertyGroup>
+	
+    <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+	
+	<PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+		<IntermediateOutputPath>..\..\build\obj\HashCalculator\</IntermediateOutputPath>
+		<OutputPath>..\..\build\bin\HashCalculator\</OutputPath>
+    </PropertyGroup>
+	
+	<Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+	
+    <ItemGroup>
+      <ProjectReference Include="..\Signature\Signature.csproj" />
+    </ItemGroup>
+</Project>
