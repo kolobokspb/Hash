@@ -65,7 +65,6 @@ namespace Signature
         {
             _onResultOfCalculate?.Invoke(stream.Number, stream.Hash);
             _fileReader?.ReleaseFilledStream(stream);
-            WakeUp();
         }
 
         private void ReleaseWorker(NormalBlockHashWorker threadWorker)
@@ -82,6 +81,7 @@ namespace Signature
             
             ReleaseStream(worker.GetStream());
             ReleaseWorker(worker);
+            WakeUp();
         }
 
         private void WakeUp()
