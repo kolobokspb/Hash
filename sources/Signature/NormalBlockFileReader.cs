@@ -72,6 +72,7 @@ namespace Signature
         {
             lock (_freeStreams)
                 _freeStreams.Enqueue(normalBlockStream);
+            _reader.WakeUp();
         }
         
         private void ReadBlock(NormalBlockStream stream)
