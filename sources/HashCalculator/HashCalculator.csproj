@@ -1,6 +1,7 @@
 <Project>
 	<PropertyGroup>
 		<BaseIntermediateOutputPath>..\..\build\obj\HashCalculator\</BaseIntermediateOutputPath>
+		<LangVersion>10</LangVersion>
 	</PropertyGroup>
 	
     <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />

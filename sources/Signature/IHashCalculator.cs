@@ -7,6 +7,9 @@ namespace Signature
         void Calculate(string path, long hashBlockSize, 
             Action<IHashCalculator, long, byte[]> onResultOfCalculate, 
             Action<IHashCalculator, long, Exception> onError);
-        long MaxNumberBlock();
+        
+        long GetMaxNumberBlock();
+        long GetMaxBlockSize();
+        long GetMinBlockSize();
     }
 }

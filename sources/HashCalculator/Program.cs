@@ -17,26 +17,17 @@ namespace HashCalculator
 
         private static long GetBlockSize(IReadOnlyList<string> args)
         {
-            var blockSize = (long)1 << 24; //default 8Mb
-            const long minBlockSize = (long)1 << 0; //1B
-            const long maxBlockSize = (long)1 << 35; //32GB
+            if (args.Count < 2) 
+                throw new Exception("Block size not set!");
             
-            if (args.Count > 1)
+            try
             {
-                try
-                {
-                    blockSize = long.Parse(args[1]);
-                }
-                catch(Exception ex)
-                {
-                    throw new Exception("Block size is not a number.", ex);
-                }        
+                return long.Parse(args[1]);
             }
-            
-            if ( blockSize < minBlockSize || blockSize > maxBlockSize) 
-                throw new Exception("Block size out of range [1B-32GB].");
-
-            return blockSize;
+            catch(Exception ex)
+            {
+                throw new Exception("Block size is not a number.", ex);
+            }
         }
         
         private static void Main(string[] args)
@@ -64,7 +55,7 @@ namespace HashCalculator
                 (hashCalculator, number, hash) =>
                 {
                     logger.Write(number, hash);
-                    if (number == hashCalculator.MaxNumberBlock())
+                    if (number == hashCalculator.GetMaxNumberBlock())
                         wait.Set();
                 },
                 (_, number, ex) =>

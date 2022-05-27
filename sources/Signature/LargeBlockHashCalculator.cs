@@ -16,6 +16,9 @@ namespace Signature
             Action<IHashCalculator, long, byte[]> onResultOfCalculate, 
             Action<IHashCalculator, long, Exception> onError)
         {
+            if ( hashBlockSize < GetMinBlockSize() || hashBlockSize > GetMaxBlockSize()) 
+                throw new Exception($"Block size out of range [{GetMinBlockSize()}B-{GetMaxBlockSize()}GB].");
+            
             _onResultOfCalculate = onResultOfCalculate;
             _onError = onError;
             _feeder = new T();
@@ -24,10 +27,11 @@ namespace Signature
             _hasher.WakeUp();
         }
 
-        public long MaxNumberBlock()
-        {
-            return _stream.MaxNumberBlock();    
-        }
+        public long GetMaxNumberBlock() { return _stream.MaxNumberBlock(); }
+
+        public long GetMinBlockSize() { return (long)1 << 0; /*1B*/}
+
+        public long GetMaxBlockSize() { return (long)1 << 35; /*32GB*/}
         
         private void Feed(ThreadWorker owner)
         {
@@ -50,7 +54,7 @@ namespace Signature
                 return;
             }
             
-            _onResultOfCalculate.Invoke(this, blockNumber.Value , hash);
+            _onResultOfCalculate?.Invoke(this, blockNumber.Value , hash);
             _hasher.WakeUp();
         }
 

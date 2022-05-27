@@ -13,24 +13,28 @@ namespace Signature
             Action<IHashCalculator, long, byte[]> onResultOfCalculate, 
             Action<IHashCalculator, long, Exception> onError)
         {
+            if ( hashBlockSize < GetMinBlockSize() || hashBlockSize > GetMaxBlockSize()) 
+                throw new Exception($"Block size out of range [{GetMinBlockSize()}B-{GetMaxBlockSize()}GB].");
+            
             _onResultOfCalculate = onResultOfCalculate;
             _onError = onError;
             
             var processorCount = Environment.ProcessorCount;
 
             _normalBlockFileReader = new NormalBlockFileReader(path, hashBlockSize, processorCount, 
-                (reader, number, ex) => {_onError.Invoke(this, number, ex);});
+                (reader, number, ex) => {_onError?.Invoke(this, number, ex);});
             _normalBlockFileReader.StartReader();
             
             _normalBlockDispatcher = new NormalBlockDispatcher<T>(_normalBlockFileReader, processorCount, 
-                (number, hash) => {_onResultOfCalculate.Invoke(this, number, hash);});
+                (number, hash) => {_onResultOfCalculate?.Invoke(this, number, hash);});
             _normalBlockDispatcher.StartDispatcher();
         }
-        
-        public long MaxNumberBlock()
-        {
-            return _normalBlockFileReader.MaxNumberBlock();
-        }
+
+        public long GetMaxNumberBlock() { return _normalBlockFileReader.MaxNumberBlock(); }
+
+        public long GetMinBlockSize() { return (long)1 << 0; /*1B*/}
+
+        public long GetMaxBlockSize() { return (long)1 << 30; /*1GB*/}
         
         public void Dispose()
         {
